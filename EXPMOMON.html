@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MoMon Tea | App Oficial</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;600;700&family=Fredoka+One&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <style>
+        :root { --momon-yellow: #ffe115; --momon-red: #ec061e; --momon-green: #3a935e; --momon-black: #231f20; }
+        body { font-family: 'Barlow', sans-serif; background-color: #f9fafb; -webkit-tap-highlight-color: transparent; }
+        
+        @media (max-width: 768px) { body { padding-bottom: 80px; } }
+
+        h1, h2, h3, .font-brand { font-family: 'Fredoka One', cursive; }
+        .paper-texture { background-color: var(--momon-yellow); background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E"); }
+        
+        /* Animaciones */
+        .float-slow { animation: float 6s ease-in-out infinite; }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+        .pulse-btn { animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+        .spinning { animation: spin 0.1s infinite; }
+        @keyframes spin { 0% { transform: rotate(-5deg); } 50% { transform: rotate(5deg); } 100% { transform: rotate(-5deg); } }
+        .slide-out { animation: slideUp 0.6s forwards; }
+        @keyframes slideUp { to { transform: translateY(-100%); opacity: 0; } }
+
+        /* UI */
+        .card-pop { background: white; border: 3px solid var(--momon-black); box-shadow: 4px 4px 0 0 var(--momon-black); transition: 0.2s; cursor: pointer; }
+        .card-pop:hover { transform: translateY(-4px); box-shadow: 6px 6px 0 0 var(--momon-black); }
+        .card-pop:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0 0 var(--momon-black); }
+        
+        .cat-active { background-color: var(--momon-black); color: var(--momon-yellow); transform: scale(1.05); }
+        .nav-active { color: var(--momon-red); }
+        .nav-active svg { fill: #ffe115; stroke: var(--momon-black); }
+        .hide-scroll::-webkit-scrollbar { display: none; }
+        
+        .option-input:checked + label { background-color: var(--momon-yellow); border-color: black; font-weight: bold; box-shadow: 2px 2px 0 0 black; }
+        .badge-locked { filter: grayscale(100%); opacity: 0.5; }
+        .badge-unlocked { animation: pop 0.5s; }
+        @keyframes pop { 0% { transform: scale(0); } 80% { transform: scale(1.2); } 100% { transform: scale(1); } }
+
+        .modal-anim { animation: slideUpModal 0.3s ease-out; }
+        @keyframes slideUpModal { from { transform: translateY(100%); } to { transform: translateY(0); } }
+        @media (min-width: 768px) { .modal-anim { animation: fadeInModal 0.3s ease-out; } @keyframes fadeInModal { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } } }
+    </style>
+</head>
+<body class="antialiased app-mode">
+
+    <!-- PANTALLA DE CARGA -->
+    <div id="intro" class="fixed inset-0 z-[100] paper-texture flex flex-col items-center justify-center text-center px-6">
+        <div class="relative z-10 float-slow mb-6">
+            <svg viewBox="0 0 200 240" class="w-56 md:w-72 h-auto drop-shadow-xl">
+                <path d="M40,230 Q30,240 50,240 L150,240 Q170,240 160,230 L180,40 L20,40 Z" fill="#ec061e" stroke="#231f20" stroke-width="5"/>
+                <ellipse cx="100" cy="40" rx="85" ry="15" fill="#ffe115" stroke="#231f20" stroke-width="5"/>
+                <g transform="translate(0, -10)">
+                    <circle cx="100" cy="140" r="50" fill="white" stroke="#231f20" stroke-width="5"/>
+                    <circle cx="90" cy="140" r="35" fill="#3a935e"/>
+                    <circle cx="80" cy="135" r="18" fill="#231f20"/>
+                    <circle cx="72" cy="128" r="8" fill="white"/>
+                </g>
+                <path d="M80,200 Q100,220 120,200" fill="none" stroke="#231f20" stroke-width="5" stroke-linecap="round"/>
+            </svg>
+        </div>
+        <p class="text-[#3a935e] font-bold tracking-widest text-sm md:text-lg mb-2 uppercase">¡Descubre la magia en cada sorbo!</p>
+        <h1 class="text-5xl md:text-7xl font-brand text-[#231f20] mb-2">Tribu de <br><span class="text-[#ec061e]">Soñadores</span></h1>
+        <button onclick="startApp()" class="bg-[#231f20] text-[#ffe115] text-2xl px-10 py-4 rounded-full font-brand border-4 border-white shadow-xl pulse-btn mt-6 hover:scale-105 transition">COMENZAR 🚀</button>
+    </div>
+
+    <!-- APP PRINCIPAL -->
+    <div id="app" class="hidden opacity-0 transition-opacity duration-500">
+        
+        <!-- HEADER -->
+        <nav class="fixed top-0 w-full bg-white/95 backdrop-blur border-b-4 border-black z-40 px-4 md:px-8 py-3 flex justify-between items-center">
+            <div class="flex items-center gap-2 cursor-pointer" onclick="location.reload()">
+                <svg viewBox="0 0 100 100" class="h-9 w-9 bg-[#ec061e] rounded-full border-2 border-black p-1">
+                    <circle cx="50" cy="50" r="45" fill="white" />
+                    <circle cx="50" cy="50" r="20" fill="#3a935e"/>
+                    <circle cx="45" cy="45" r="8" fill="#231f20"/>
+                </svg>
+                <span class="font-brand text-xl md:text-2xl">MoMon Tea</span>
+            </div>
+
+            <div class="hidden md:flex gap-6 font-bold text-gray-500">
+                <button onclick="nav('shop')" id="d-btn-shop" class="hover:text-[#ec061e] transition text-[#ec061e]">Tienda</button>
+                <button onclick="nav('games')" id="d-btn-games" class="hover:text-[#ec061e] transition">Juegos</button>
+                <button onclick="nav('profile')" id="d-btn-profile" class="hover:text-[#ec061e] transition">La Tribu</button>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <div class="hidden md:flex items-center gap-2 bg-gray-100 px-3 py-1 rounded-full border border-gray-300 text-xs font-bold cursor-pointer hover:bg-gray-200" onclick="nav('profile')">
+                    <span id="header-rank">Nivel 1: Aprendiz</span>
+                </div>
+                <button onclick="toggleCart()" class="relative p-2 bg-gray-100 hover:bg-gray-200 rounded-full transition">
+                    <span id="badge-top" class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center hidden">0</span>
+                    🛒
+                </button>
+            </div>
+        </nav>
+
+        <!-- CONTENIDO -->
+        <div class="pt-20 w-full max-w-7xl mx-auto px-0 md:px-4">
+            
+            <!-- TIENDA -->
+            <div id="view-shop">
+                <div class="mx-4 mb-6 bg-[#ffe115] border-4 border-black rounded-2xl p-6 paper-texture shadow-[4px_4px_0_0_black] flex flex-col md:flex-row justify-between items-center gap-4">
+                    <div class="text-center md:text-left">
+                        <span class="bg-white text-[10px] font-bold px-2 py-1 border border-black rounded inline-block mb-2">🔥 HOY</span>
+                        <h2 class="text-3xl md:text-5xl font-brand leading-none">MARTES <span class="text-red-600">2x1</span></h2>
+                        <p class="text-sm md:text-base font-bold mt-1">En todos los Milk Teas. ¡Acumula doble XP!</p>
+                    </div>
+                    <div class="text-6xl md:text-8xl animate-bounce">👯</div>
+                </div>
+
+                <div class="sticky top-[65px] z-30 bg-[#f9fafb] py-2 border-b border-gray-200 overflow-x-auto hide-scroll pl-4 mb-6 md:rounded-lg">
+                    <div class="flex gap-2 w-max pr-4">
+                        <button onclick="filter('all')" class="cat-active px-4 py-1 rounded-full border-2 border-black font-bold text-sm transition hover:scale-105">🔥 Todos</button>
+                        <button onclick="filter('milk-tea')" class="bg-white px-4 py-1 rounded-full border-2 border-black font-bold text-sm hover:bg-gray-100">🧋 Milk Teas</button>
+                        <button onclick="filter('choco')" class="bg-white px-4 py-1 rounded-full border-2 border-black font-bold text-sm hover:bg-gray-100">🍫 Choco</button>
+                        <button onclick="filter('tea-tale')" class="bg-white px-4 py-1 rounded-full border-2 border-black font-bold text-sm hover:bg-gray-100">🍹 Frutados</button>
+                        <button onclick="filter('shakes')" class="bg-white px-4 py-1 rounded-full border-2 border-black font-bold text-sm hover:bg-gray-100">☁️ Shakes</button>
+                        <button onclick="filter('lychee')" class="bg-white px-4 py-1 rounded-full border-2 border-black font-bold text-sm hover:bg-gray-100">🍒 Lychee</button>
+                        <button onclick="filter('palta')" class="bg-white px-4 py-1 rounded-full border-2 border-black font-bold text-sm hover:bg-gray-100">🥑 Palta</button>
+                        <button onclick="filter('probiotico')" class="bg-white px-4 py-1 rounded-full border-2 border-black font-bold text-sm hover:bg-gray-100">🧪 Probiótico</button>
+                        <button onclick="filter('matcha')" class="bg-white px-4 py-1 rounded-full border-2 border-black font-bold text-sm hover:bg-gray-100">🍵 Matcha</button>
+                        <button onclick="filter('taro')" class="bg-white px-4 py-1 rounded-full border-2 border-black font-bold text-sm hover:bg-gray-100">💜 Taro</button>
+                        <button onclick="filter('bubble-love')" class="bg-white px-4 py-1 rounded-full border-2 border-black font-bold text-sm hover:bg-gray-100">💖 Bubble</button>
+                        <button onclick="filter('jugomix')" class="bg-white px-4 py-1 rounded-full border-2 border-black font-bold text-sm hover:bg-gray-100">🍓 Jugos</button>
+                    </div>
+                </div>
+
+                <div id="grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 px-4 pb-24 md:pb-10"></div>
+            </div>
+
+            <!-- JUEGOS -->
+            <div id="view-games" class="hidden px-4 text-center w-full max-w-2xl mx-auto">
+                <div class="bg-[#3a935e] text-white border-4 border-black rounded-2xl p-8 shadow-[4px_4px_0_0_black] mb-6">
+                    <h2 class="text-4xl font-brand mb-2">Ruleta del Té</h2>
+                    <p class="text-base mb-6 opacity-90">Costo: 50 Tokens (Tienes: <span id="game-tokens">0</span>)</p>
+                    <div class="bg-white w-48 h-48 rounded-full border-8 border-[#ffe115] mx-auto flex items-center justify-center text-6xl text-black mb-8 relative overflow-hidden shadow-inner" id="roulette">🎰</div>
+                    <button onclick="spin()" class="bg-[#ec061e] text-white font-brand text-2xl px-10 py-3 rounded-full border-4 border-white shadow-lg hover:scale-105 transition active:scale-95" id="btn-spin">GIRAR</button>
+                    <p id="spin-result" class="mt-6 font-bold text-[#ffe115] min-h-[32px] text-xl"></p>
+                </div>
+                <div class="bg-white p-6 rounded-xl border-2 border-gray-200 text-left shadow-sm">
+                    <h3 class="font-bold mb-4 text-lg border-b pb-2">Probabilidades (Según el Sabio):</h3>
+                    <ul class="text-sm space-y-2 text-gray-600">
+                        <li class="flex justify-between"><span>🍵 1 Té Clásico Gratis</span> <span class="font-bold text-green-600">5%</span></li>
+                        <li class="flex justify-between"><span>🧁 Topping Gratis</span> <span class="font-bold text-blue-600">10%</span></li>
+                        <li class="flex justify-between"><span>🎫 Cupón 20% Dscto</span> <span class="font-bold text-purple-600">10%</span></li>
+                        <li class="flex justify-between"><span>⭐ 50 Puntos XP</span> <span class="font-bold text-yellow-600">15%</span></li>
+                        <li class="flex justify-between"><span>🎲 Sorteo Premio Mayor</span> <span class="font-bold text-orange-600">15%</span></li>
+                        <li class="flex justify-between"><span>✨ 15 Puntos XP</span> <span class="font-bold text-yellow-600">15%</span></li>
+                        <li class="flex justify-between"><span>✨ 25 Puntos XP</span> <span class="font-bold text-yellow-600">10%</span></li>
+                        <li class="flex justify-between"><span>😢 Sigue intentando</span> <span class="font-bold text-gray-400">10%</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- PERFIL -->
+            <div id="view-profile" class="hidden px-4 w-full max-w-2xl mx-auto">
+                <div class="bg-white border-4 border-black rounded-2xl p-6 mb-8 shadow-[4px_4px_0_0_black] text-center relative overflow-hidden">
+                    <div class="w-24 h-24 bg-gray-200 rounded-full mx-auto border-4 border-black mb-3 flex items-center justify-center text-5xl">🧒</div>
+                    <h2 class="text-3xl font-brand" id="user-name">Soñador</h2>
+                    <p class="text-[#3a935e] font-bold text-base mb-6" id="user-rank">Nivel 1: Aprendiz</p>
+                    <div class="flex justify-center gap-4 mb-6">
+                        <div class="bg-gray-50 p-4 rounded-xl border w-1/2 hover:shadow-md transition"><div class="text-xs font-bold text-gray-500 uppercase">XP Acumulada</div><div class="text-2xl font-brand" id="p-xp">0</div></div>
+                        <div class="bg-gray-50 p-4 rounded-xl border w-1/2 hover:shadow-md transition"><div class="text-xs font-bold text-gray-500 uppercase">Tokens Disponibles</div><div class="text-2xl font-brand text-[#ec061e]" id="p-tokens">0</div></div>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-6 border-2 border-black overflow-hidden relative">
+                        <div id="xp-bar" class="bg-[#ffe115] h-full transition-all duration-500" style="width: 0%"></div>
+                        <span class="absolute inset-0 flex items-center justify-center text-[10px] font-bold tracking-wider" id="xp-progress-text">0 / 600</span>
+                    </div>
+                    <p class="text-xs text-gray-400 mt-2" id="xp-next">Sigue comprando para subir de nivel</p>
+                </div>
+                
+                <div class="bg-white border-2 border-dashed border-gray-400 rounded-xl p-6 mb-8 text-center md:text-left">
+                    <h3 class="font-bold text-lg mb-2">🔑 Canjear Código</h3>
+                    <p class="text-sm text-gray-500 mb-4">Ingresa el código de tu boleta de WhatsApp para sumar tus puntos.</p>
+                    <div class="flex gap-2 max-w-md">
+                        <input type="text" id="claim-code" placeholder="Ej: MOMON20" class="flex-1 border-2 border-gray-300 rounded-lg px-4 py-2 uppercase font-bold text-sm focus:border-[#ec061e] outline-none">
+                        <button onclick="redeemCode()" class="bg-black text-white px-6 py-2 rounded-lg font-bold text-sm hover:bg-gray-800">Canjear</button>
+                    </div>
+                </div>
+
+                <h3 class="font-brand text-2xl mb-4">🏆 Insignias</h3>
+                <div class="grid grid-cols-3 md:grid-cols-4 gap-4 mb-8" id="badges"></div>
+            </div>
+
+        </div>
+
+        <!-- MENU MOVIL -->
+        <div class="fixed bottom-0 w-full bg-white border-t-4 border-black z-40 pb-safe md:hidden">
+            <div class="flex justify-around h-16 items-center">
+                <button onclick="nav('shop')" id="btn-shop" class="nav-active flex flex-col items-center w-1/3 transition"><span class="text-2xl">🏠</span><span class="text-xs font-bold">Tienda</span></button>
+                <button onclick="nav('games')" id="btn-games" class="text-gray-400 flex flex-col items-center w-1/3 transition"><span class="text-2xl">🎰</span><span class="text-xs font-bold">Juegos</span></button>
+                <button onclick="nav('profile')" id="btn-profile" class="text-gray-400 flex flex-col items-center w-1/3 transition"><span class="text-2xl">👤</span><span class="text-xs font-bold">Tribu</span></button>
+            </div>
+        </div>
+        
+        <!-- FAB CART -->
+        <button onclick="toggleCart()" class="fixed bottom-20 right-4 md:bottom-8 md:right-8 z-50 bg-[#ec061e] text-white p-4 rounded-full border-2 border-black shadow-xl flex items-center justify-center transform transition hover:scale-110 hover:rotate-3">
+            <span id="badge-fab" class="absolute -top-2 -right-1 bg-[#ffe115] text-black text-xs font-bold w-6 h-6 flex items-center justify-center rounded-full border-2 border-black shadow-sm hidden">0</span>
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 00-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+        </button>
+    </div>
+
+    <!-- MODAL PRODUCTO -->
+    <div id="product-modal" class="fixed inset-0 z-[60] hidden flex items-end md:items-center justify-center">
+        <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" onclick="closeModal()"></div>
+        <div class="relative w-full md:max-w-lg bg-white md:rounded-2xl rounded-t-2xl border-t-4 md:border-4 border-black p-0 max-h-[85vh] flex flex-col modal-anim shadow-2xl">
+            <div class="bg-[#ffe115] p-4 md:rounded-t-xl border-b-2 border-black flex justify-between items-center sticky top-0 z-10">
+                <h3 id="m-title" class="text-xl font-brand">Personalizar</h3>
+                <button onclick="closeModal()" class="text-3xl font-bold leading-none hover:text-white transition">&times;</button>
+            </div>
+            <div class="p-6 space-y-6 overflow-y-auto flex-1 pb-24">
+                <p id="m-desc" class="text-sm text-gray-600 italic border-l-4 border-[#3a935e] pl-3"></p>
+                
+                <!-- OPCIONES DINÁMICAS -->
+                <div id="dynamic-options-container"></div>
+
+                <!-- 2. TAMAÑO -->
+                <div>
+                    <label class="font-bold text-sm block mb-2">Tamaño</label>
+                    <div class="flex flex-col gap-2 text-xs">
+                        <div class="relative"><input type="radio" name="size" value="Emoción" data-price="0" id="s1" class="option-input hidden" checked onchange="calcPrice()"><label for="s1" class="flex justify-between border p-3 rounded-lg cursor-pointer hover:bg-gray-50 transition"><span>Emoción (420ml)</span><span>Base</span></label></div>
+                        <div class="relative"><input type="radio" name="size" value="Ánimo" data-price="3" id="s2" class="option-input hidden" onchange="calcPrice()"><label for="s2" class="flex justify-between border p-3 rounded-lg cursor-pointer hover:bg-gray-50 transition"><span>Ánimo (660ml)</span><span class="text-red-600 font-bold">+S/3</span></label></div>
+                        <div class="relative"><input type="radio" name="size" value="Inspiración" data-price="5" id="s3" class="option-input hidden" onchange="calcPrice()"><label for="s3" class="flex justify-between border p-3 rounded-lg cursor-pointer hover:bg-gray-50 transition"><span>Inspiración (1000ml)</span><span class="text-red-600 font-bold">+S/5</span></label></div>
+                    </div>
+                </div>
+
+                <!-- 3. OTROS -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div><label class="font-bold text-sm">Temperatura</label><select id="temp" class="w-full border-2 border-gray-200 p-2 rounded-lg mt-1 text-sm focus:border-black outline-none"><option>Con Hielo</option><option>Poco Hielo</option><option>Al Tiempo</option><option>Tibio</option></select></div>
+                    <div><label class="font-bold text-sm">Azúcar</label><select id="sugar" class="w-full border-2 border-gray-200 p-2 rounded-lg mt-1 text-sm focus:border-black outline-none"><option>Normal (100%)</option><option>Dulcero (120%)</option><option>Baja (50%)</option><option>Sin Azúcar</option><option>Stevia</option></select></div>
+                </div>
+                <div><label class="font-bold text-sm">Sorbete</label><div class="flex gap-4 text-sm mt-2"><label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="straw" value="Con" checked> Con Sorbete</label><label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="straw" value="Sin"> Sin Sorbete</label></div></div>
+
+                <!-- 6. EXTRAS -->
+                <div>
+                    <label class="font-bold text-sm">Adicionales (+S/2)</label>
+                    <div class="grid grid-cols-2 gap-3 text-xs mt-2">
+                        <label class="flex items-center gap-2 p-2 border rounded-lg cursor-pointer hover:bg-gray-50"><input type="checkbox" value="Tapioca" class="extra" onchange="calcPrice()"> Tapioca</label>
+                        <label class="flex items-center gap-2 p-2 border rounded-lg cursor-pointer hover:bg-gray-50"><input type="checkbox" value="Pudding" class="extra" onchange="calcPrice()"> Pudding</label>
+                        <label class="flex items-center gap-2 p-2 border rounded-lg cursor-pointer hover:bg-gray-50"><input type="checkbox" value="Cream Top" class="extra" onchange="calcPrice()"> Cream Top</label>
+                        <label class="flex items-center gap-2 p-2 border rounded-lg cursor-pointer hover:bg-gray-50"><input type="checkbox" value="Juicyball" class="extra" onchange="calcPrice()"> Juicyball</label>
+                        <label class="flex items-center gap-2 p-2 border rounded-lg cursor-pointer hover:bg-gray-50"><input type="checkbox" value="Sienchao" class="extra" onchange="calcPrice()"> Sienchao</label>
+                        <label class="flex items-center gap-2 p-2 border rounded-lg cursor-pointer hover:bg-gray-50"><input type="checkbox" value="Gelatina Coco" class="extra" onchange="calcPrice()"> Gelatina Coco</label>
+                    </div>
+                </div>
+            </div>
+            <div class="p-4 border-t bg-white flex justify-between items-center absolute bottom-0 w-full z-20 md:relative md:rounded-b-2xl">
+                <div class="text-2xl font-brand text-[#ec061e]" id="m-total">S/ 0.00</div>
+                <button onclick="addCart()" class="bg-[#231f20] text-[#ffe115] px-8 py-3 rounded-xl font-bold hover:scale-105 transition shadow-lg">AGREGAR</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CARRITO -->
+    <div id="cart-sheet" class="fixed inset-0 z-[80] hidden">
+        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="toggleCart()"></div>
+        <div class="absolute right-0 top-0 h-full w-full md:w-[450px] bg-white shadow-2xl flex flex-col transition-transform duration-300" id="cart-container">
+            <div class="bg-[#ffe115] p-5 border-b-4 border-black flex justify-between items-center">
+                <h2 class="text-2xl font-brand">Tu Pedido 🛒</h2>
+                <button onclick="toggleCart()" class="text-3xl font-bold hover:text-white transition">&times;</button>
+            </div>
+            <div id="cart-list" class="flex-1 overflow-y-auto p-5 space-y-4 bg-gray-50"></div>
+            <div class="p-6 border-t-4 border-black bg-white">
+                 <div class="flex justify-between font-bold mb-3 text-xl"><span>Total:</span><span id="cart-final">S/ 0.00</span></div>
+                 <button onclick="sendWA()" class="w-full bg-[#25D366] text-white text-lg py-4 rounded-xl font-bold shadow-hard hover:bg-green-500 transition flex items-center justify-center gap-2"><span>Confirmar en WhatsApp</span></button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- DATOS ---
+        const levels = [
+            { lvl: 1, name: "Aprendiz de la Magia", minXP: 0 },
+            { lvl: 2, name: "Conocedor de Sabores", minXP: 600 },
+            { lvl: 3, name: "Catador de Bebidas", minXP: 1800 },
+            { lvl: 4, name: "Creador Avanzado", minXP: 3600 },
+            { lvl: 5, name: "El Sabio de MoMon", minXP: 7200 }
+        ];
+
+        const fruitsList = ['Arándano', 'Coco', 'Chirimoya', 'Durazno', 'Guanabana', 'Fresa', 'Limón', 'Lucuma', 'Lychee', 'Mango', 'Maracuyá', 'Melón', 'Naranja', 'Plátano', 'Papaya', 'Piña', 'Palta', 'Sandia', 'Uva'];
+
+        const products = [
+            { id: 101, name: "Comelón Milk Tea", category: "milk-tea", price: 14.00, desc: "Té negro, Leche evaporada, Cream Top y vainilla.", image: "bg-amber-100" },
+            { id: 102, name: "Tradicional", category: "milk-tea", price: 12.00, desc: "El clásico: Té negro, Leche evaporada, Cream top y vainilla.", image: "bg-amber-100" },
+            { id: 103, name: "Té Oolong/Verde Latte", category: "milk-tea", price: 13.00, desc: "Tu elección de Té (Oolong o Verde) con leche y Cream Top.", image: "bg-green-100" },
+            { id: 104, name: "Ying Yang", category: "milk-tea", price: 15.00, desc: "Mezcla de Té negro y Café con leche evaporada.", image: "bg-stone-200" },
+            { id: 105, name: "Perú Milk Tea", category: "milk-tea", price: 16.00, desc: "Sabor nacional: Té negro con pura pulpa de Lúcuma.", image: "bg-yellow-200" },
+            { id: 201, name: "Dryad", category: "choco", price: 15.00, desc: "Té Oolong con Cacao Mix, Cream Top y Oreo molido.", image: "bg-yellow-900" },
+            { id: 202, name: "Milk Choco Oreo Frozen", category: "choco", price: 16.00, desc: "Cacao, Leche, Cream Top y Oreo en modo Frozen.", image: "bg-gray-800" },
+            { id: 203, name: "Marshmallow Chocolate", category: "choco", price: 14.00, desc: "Cacao Mix con Chantillí y decoración de Marshmallows.", image: "bg-orange-900" },
+            { id: 204, name: "ChocoMenta", category: "choco", price: 15.00, desc: "Chocolate con un toque refrescante de Menta.", image: "bg-teal-900" },
+            { id: 205, name: "ChocoCafé", category: "choco", price: 15.00, desc: "La energía del Café combinada con Cacao Mix.", image: "bg-amber-900" },
+            { id: 206, name: "Oolong Mist", category: "choco", price: 15.00, desc: "Cacao Mix, Té Oolong y Jarabe de Menta.", image: "bg-green-800" },
+            { id: 207, name: "Tiramisú", category: "choco", price: 16.00, desc: "Cacao, Café, Cream Top y Vainilla.", image: "bg-amber-200" },
+            { id: 208, name: "Máximo Rosales", category: "choco", price: 17.00, desc: "Café, Chantillí, Oreo, Juicy Ball y Marshmallow.", image: "bg-pink-100" },
+            { id: 209, name: "Choco Fresa", category: "choco", price: 16.00, desc: "Cacao Mix con Fresas reales y Jarabe de Fresa.", image: "bg-red-900" },
+            { id: 301, name: "Locci", category: "tea-tale", price: 14.00, desc: "Té Jasmín, Naranja, Lychee y Chicle.", image: "bg-orange-200" },
+            { id: 302, name: "Ágata", category: "tea-tale", price: 15.00, desc: "Limón, Fresa, Mango y Soda refrescante.", image: "bg-red-200" },
+            { id: 303, name: "Esmeralda", category: "tea-tale", price: 14.00, desc: "Té Verde, Manzana, Lychee, Menta y Canela.", image: "bg-green-200" },
+            { id: 304, name: "Ónix", category: "tea-tale", price: 15.00, desc: "Té Oolong, Uva, Blueberry y Soda.", image: "bg-purple-900" },
+            { id: 305, name: "Rubí", category: "tea-tale", price: 14.00, desc: "Té Verde, Fresa, Sandía y Soda.", image: "bg-red-400" },
+            { id: 306, name: "Zafiro", category: "tea-tale", price: 15.00, desc: "Té Jasmín, Uva, Blueberry y Chicle.", image: "bg-blue-300" },
+            { id: 307, name: "Limonada Monster", category: "tea-tale", price: 12.00, desc: "Té Jasmín, Limón y extracto de Romero.", image: "bg-lime-100" },
+            { id: 308, name: "Piña Colada Virgen", category: "tea-tale", price: 14.00, desc: "Piña, Leche de Coco y Agua Natural.", image: "bg-yellow-100" },
+            { id: 309, name: "SourCoco", category: "tea-tale", price: 14.00, desc: "Té Verde, Limón, Maracuyá y Leche de Coco.", image: "bg-yellow-300" },
+            { id: 310, name: "Moquito", category: "tea-tale", price: 13.00, desc: "Té Verde, Limón, Hierba Buena, Menta y Soda.", image: "bg-green-300" },
+            { id: 311, name: "Gin Tea", category: "tea-tale", price: 14.00, desc: "Té Jasmín, Cítricos, Hierbaluisa y Soda (Sin alcohol).", image: "bg-yellow-200" },
+            { id: 312, name: "Bloodmoon", category: "tea-tale", price: 15.00, desc: "Té Negro, Fresa, Lychee, Blueberry y Soda.", image: "bg-red-900" },
+            { id: 313, name: "Karma", category: "tea-tale", price: 14.00, desc: "Té Jasmín, Naranja, Hierbaluisa y Blueberry.", image: "bg-orange-300" },
+            { id: 314, name: "Tropical Splash", category: "tea-tale", price: 14.00, desc: "Fresa, Mango, Piña y Soda.", image: "bg-orange-400" },
+            { id: 401, name: "Wendigo", category: "shakes", price: 16.00, desc: "Leche de coco, menta, chicle y Cream Top.", image: "bg-blue-100" },
+            { id: 402, name: "Bluesea", category: "shakes", price: 16.00, desc: "Coco, Guanábana, Chicle y gomita.", image: "bg-cyan-200" },
+            { id: 403, name: "Ying Yang Peruano", category: "shakes", price: 16.00, desc: "Té Negro, Café, Lúcuma y Chantillí.", image: "bg-orange-100" },
+            { id: 404, name: "Granny Smith", category: "shakes", price: 15.00, desc: "Lychee, Manzana, Menta y Canela.", image: "bg-green-100" },
+            { id: 405, name: "Lucumoca", category: "shakes", price: 16.00, desc: "Cacao, Café, Lúcuma, Chantillí.", image: "bg-yellow-600" },
+            { id: 406, name: "Banana Split", category: "shakes", price: 16.00, desc: "Cacao, Plátano, Fresa y Chantillí.", image: "bg-yellow-100" },
+            { id: 407, name: "Pie de Blueberry", category: "shakes", price: 17.00, desc: "Blueberry, Cream Top y Crumbles de galleta.", image: "bg-purple-300" },
+            { id: 408, name: "Pie de Manzana", category: "shakes", price: 16.00, desc: "Manzana, Canela, Cream Top y Crumbles.", image: "bg-red-100" },
+            { id: 409, name: "Pie de Maracuyá", category: "shakes", price: 16.00, desc: "Maracuyá, Cream Top y Crumbles.", image: "bg-yellow-300" },
+            { id: 410, name: "Pie de Limón", category: "shakes", price: 16.00, desc: "Limón, Cream Top y Crumbles.", image: "bg-lime-200" },
+            { id: 411, name: "Pie de Kión", category: "shakes", price: 15.00, desc: "Kión, Canela, Cream Top y Crumbles.", image: "bg-amber-100" },
+            { id: 412, name: "Pie de Coco", category: "shakes", price: 16.00, desc: "Coco, Cream Top y Crumbles.", image: "bg-white" },
+            { id: 413, name: "Pie de Chocolate", category: "shakes", price: 16.00, desc: "Cacao, Cream Top y Crumbles.", image: "bg-stone-700" },
+            { id: 414, name: "Pie de Taro", category: "shakes", price: 17.00, desc: "Taro, Cream Top y Crumbles.", image: "bg-purple-200" },
+            { id: 415, name: "Pie de Matcha", category: "shakes", price: 17.00, desc: "Matcha, Cream Top y Crumbles.", image: "bg-green-400" },
+            { id: 501, name: "Bosque", category: "lychee", price: 14.00, desc: "Té Verde, Hierbabuena, Lychee.", image: "bg-green-100" },
+            { id: 502, name: "Buda", category: "lychee", price: 15.00, desc: "Té Negro, Limón, Hierbaluisa.", image: "bg-orange-100" },
+            { id: 503, name: "GuanYin", category: "lychee", price: 14.00, desc: "Té Verde, Limón, Lychee.", image: "bg-yellow-100" },
+            { id: 504, name: "Sakura", category: "lychee", price: 15.00, desc: "Lychee, Té Verde, Fresa.", image: "bg-pink-200" },
+            { id: 505, name: "Sunset", category: "lychee", price: 14.00, desc: "Té Jasmín, Naranja, Lychee.", image: "bg-orange-300" },
+            { id: 601, name: "Palta Frutado (Fresa)", category: "palta", price: 17.00, desc: "Cremosa palta batida con Fresas.", image: "bg-green-200" },
+            { id: 602, name: "Palta Frutado (Blue)", category: "palta", price: 18.00, desc: "Palta con Blueberry.", image: "bg-purple-200" },
+            { id: 603, name: "Palta Frutado (Mara)", category: "palta", price: 17.00, desc: "Palta con Maracuyá.", image: "bg-yellow-200" },
+            { id: 604, name: "Palta con Té y Leche", category: "palta", price: 16.00, desc: "Palta, Té, Leche.", image: "bg-green-100" },
+            { id: 605, name: "Palta con Chocolate", category: "palta", price: 17.00, desc: "Palta y Cacao Mix.", image: "bg-stone-600" },
+            { id: 606, name: "Palta con Taro", category: "palta", price: 18.00, desc: "Palta y Taro.", image: "bg-purple-100" },
+            { id: 607, name: "Palta con Probiótico", category: "palta", price: 18.00, desc: "Palta con probióticos.", image: "bg-green-50" },
+            { id: 608, name: "Pitufín", category: "palta", price: 17.00, desc: "Palta, Mango, Chicle (Azul).", image: "bg-blue-200" },
+            { id: 701, name: "Probiótico Fresa", category: "probiotico", price: 15.00, desc: "Fresa con probióticos.", image: "bg-red-200" },
+            { id: 702, name: "Probiótico Blueberry", category: "probiotico", price: 16.00, desc: "Blueberry con probióticos.", image: "bg-purple-300" },
+            { id: 703, name: "Antioxidante", category: "probiotico", price: 17.00, desc: "Fresa, Blueberry, Matcha.", image: "bg-purple-900" },
+            { id: 704, name: "Slim Tea", category: "probiotico", price: 14.00, desc: "Piña, Té Verde, Hierbabuena.", image: "bg-yellow-100" },
+            { id: 705, name: "Blackberry", category: "probiotico", price: 15.00, desc: "Blueberry, Té Oolong.", image: "bg-purple-800" },
+            { id: 706, name: "GreenDay", category: "probiotico", price: 14.00, desc: "Té Verde, Limón, Menta.", image: "bg-green-300" },
+            { id: 707, name: "Refrescante", category: "probiotico", price: 14.00, desc: "Té Jasmín, Naranja, Limón.", image: "bg-orange-200" },
+            { id: 801, name: "Matcha Latte", category: "matcha", price: 15.00, desc: "Matcha puro con leche.", image: "bg-green-400" },
+            { id: 802, name: "Matcha Oreo", category: "matcha", price: 16.00, desc: "Matcha Latte batido con Oreo.", image: "bg-green-500" },
+            { id: 803, name: "Matcha Fresa", category: "matcha", price: 16.00, desc: "Matcha con Fresa.", image: "bg-red-300" },
+            { id: 804, name: "Matcha Blueberry", category: "matcha", price: 17.00, desc: "Matcha con Blueberry.", image: "bg-purple-400" },
+            { id: 805, name: "Matcha Maracuyá", category: "matcha", price: 16.00, desc: "Matcha con Maracuyá.", image: "bg-yellow-400" },
+            { id: 806, name: "Matcha Colada", category: "matcha", price: 16.00, desc: "Matcha, Piña, Coco.", image: "bg-yellow-100" },
+            { id: 807, name: "Matcha Tropical", category: "matcha", price: 16.00, desc: "Matcha, Piña, Naranja.", image: "bg-orange-300" },
+            { id: 808, name: "LucuMatcha", category: "matcha", price: 17.00, desc: "Matcha, Lúcuma.", image: "bg-yellow-600" },
+            { id: 901, name: "Taro Latte", category: "taro", price: 15.00, desc: "Taro clásico, leche.", image: "bg-purple-300" },
+            { id: 902, name: "Taro Oreo", category: "taro", price: 16.00, desc: "Taro, Oreo.", image: "bg-purple-400" },
+            { id: 903, name: "Taro Fresa", category: "taro", price: 16.00, desc: "Taro, Fresa.", image: "bg-pink-300" },
+            { id: 904, name: "Taro Blueberry", category: "taro", price: 17.00, desc: "Taro, Blueberry.", image: "bg-purple-600" },
+            { id: 905, name: "Taro Maracuyá", category: "taro", price: 16.00, desc: "Taro, Maracuyá.", image: "bg-yellow-300" },
+            { id: 906, name: "Taro Lúcuma", category: "taro", price: 17.00, desc: "Taro, Lúcuma.", image: "bg-purple-200" },
+            { id: 907, name: "Tarolandia", category: "taro", price: 18.00, desc: "Taro, Mango, Matcha.", image: "bg-green-300" },
+            { id: 908, name: "Alice", category: "taro", price: 17.00, desc: "Taro, Coco, Algodón.", image: "bg-purple-100" },
+            { id: 1001, name: "Bubble Rose", category: "bubble-love", price: 16.00, desc: "Fresa, Leche, Corazones.", image: "bg-pink-100" },
+            { id: 1002, name: "Bubble Fall", category: "bubble-love", price: 16.00, desc: "Lúcuma, Fudge.", image: "bg-yellow-500" },
+            { id: 1003, name: "Bubble Sky", category: "bubble-love", price: 16.00, desc: "Limón, Algodón.", image: "bg-blue-100" },
+            { id: 1101, name: "Jugo 1 Fruta", category: "jugomix", price: 12.00, desc: "Elige 1 fruta.", image: "bg-red-100" },
+            { id: 1102, name: "Jugo 2 Frutas", category: "jugomix", price: 13.00, desc: "Elige 2 frutas.", image: "bg-orange-200" },
+            { id: 1103, name: "Jugo 3 Frutas", category: "jugomix", price: 14.00, desc: "Elige 3 frutas.", image: "bg-yellow-200" }
+        ];
+        
+        // CAMBIO CLAVE LOCALSTORAGE PARA FORZAR REINICIO A NIVEL 1
+        let cart = [];
+        let user = JSON.parse(localStorage.getItem('momonClientV2')) || { xp: 0, tokens: 50, level: 1 };
+        if(!user.level) user.level = 1;
+        let curProd = null;
+
+        function startApp() {
+            confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+            document.getElementById('intro').classList.add('slide-out');
+            setTimeout(() => {
+                document.getElementById('intro').style.display = 'none';
+                document.getElementById('app').classList.remove('hidden');
+                document.getElementById('app').classList.remove('opacity-0');
+            }, 500);
+            render('all');
+            updateUser();
+            renderBadges();
+        }
+
+        function nav(tab) {
+            // Desktop Nav
+            ['shop','games','profile'].forEach(t => {
+                document.getElementById('view-'+t).classList.add('hidden');
+                const dBtn = document.getElementById('d-btn-'+t);
+                const mBtn = document.getElementById('btn-'+t);
+                
+                if(dBtn) dBtn.classList.remove('text-[#ec061e]');
+                if(mBtn) { mBtn.classList.remove('nav-active'); mBtn.classList.add('text-gray-400'); }
+            });
+
+            document.getElementById('view-'+tab).classList.remove('hidden');
+            const dActive = document.getElementById('d-btn-'+tab);
+            const mActive = document.getElementById('btn-'+tab);
+            
+            if(dActive) dActive.classList.add('text-[#ec061e]');
+            if(mActive) { mActive.classList.add('nav-active'); mActive.classList.remove('text-gray-400'); }
+            
+            window.scrollTo(0,0);
+        }
+
+        function render(cat) {
+            const g = document.getElementById('grid');
+            g.innerHTML = '';
+            const list = cat === 'all' ? products : products.filter(p => p.category === cat);
+            list.forEach(p => {
+                g.innerHTML += `
+                <div class="card-pop rounded-xl overflow-hidden flex flex-col group cursor-pointer" onclick="openModal(${p.id})">
+                    <div class="${p.image} h-32 flex items-center justify-center text-4xl relative transition-transform group-hover:scale-105">🧋
+                        <div class="absolute top-2 right-2 bg-white text-[10px] px-2 rounded border border-black">+XP</div>
+                    </div>
+                    <div class="p-3 flex flex-col flex-1">
+                        <h3 class="font-bold text-sm leading-tight mb-1">${p.name}</h3>
+                        <p class="text-xs text-gray-500 mb-2 line-clamp-2">${p.desc}</p>
+                        <div class="flex justify-between items-end mt-auto">
+                            <span class="text-[#ec061e] font-brand text-sm">S/ ${p.price.toFixed(2)}</span>
+                            <button class="bg-black text-white w-6 h-6 rounded-full flex items-center justify-center text-sm">+</button>
+                        </div>
+                    </div>
+                </div>`;
+            });
+        }
+
+        function filter(cat) {
+            document.querySelectorAll('.cat-active').forEach(e => {e.classList.remove('cat-active'); e.classList.add('bg-white')});
+            event.target.classList.add('cat-active'); event.target.classList.remove('bg-white');
+            render(cat);
+        }
+
+        // --- MODAL LOGIC ---
+        function openModal(id) {
+            curProd = products.find(p => p.id === id);
+            document.getElementById('m-title').innerText = curProd.name;
+            document.getElementById('m-desc').innerText = curProd.desc;
+            
+            const dyn = document.getElementById('dynamic-options-container');
+            dyn.innerHTML = '';
+
+            if (curProd.category === 'jugomix') {
+                let limit = 1;
+                if (curProd.id === 1102) limit = 2;
+                if (curProd.id === 1103) limit = 3;
+                let html = `<label class="font-bold text-sm block mb-2">Elige ${limit} Fruta(s)</label><div class="grid grid-cols-2 gap-2 text-xs">`;
+                fruitsList.forEach(fruit => {
+                    html += `<label class="flex items-center gap-2 p-2 border rounded-lg cursor-pointer hover:bg-gray-50"><input type="checkbox" value="${fruit}" class="fruit-check" onchange="limitFruit(${limit})"> ${fruit}</label>`;
+                });
+                html += `</div>`;
+                dyn.innerHTML = html;
+            } else {
+                dyn.innerHTML = `
+                    <label class="font-bold text-sm block mb-2">1. Diversión (Base)</label>
+                    <div class="grid grid-cols-2 gap-2 text-xs">
+                        <div class="relative"><input type="radio" name="base" value="Estoy bien" id="b0" class="option-input hidden" checked><label for="b0" class="block border p-2 rounded text-center cursor-pointer">Estoy bien</label></div>
+                        <div class="relative"><input type="radio" name="base" value="Tapioca" id="b1" class="option-input hidden"><label for="b1" class="block border p-2 rounded text-center cursor-pointer">Tapioca</label></div>
+                        <div class="relative"><input type="radio" name="base" value="Gelatina Coco" id="b2" class="option-input hidden"><label for="b2" class="block border p-2 rounded text-center cursor-pointer">Gelatina Coco</label></div>
+                        <div class="relative"><input type="radio" name="base" value="Juicyball" id="b3" class="option-input hidden"><label for="b3" class="block border p-2 rounded text-center cursor-pointer">Juicyball</label></div>
+                        <div class="relative"><input type="radio" name="base" value="Sienchao" id="b4" class="option-input hidden"><label for="b4" class="block border p-2 rounded text-center cursor-pointer">Sienchao</label></div>
+                        <div class="relative"><input type="radio" name="base" value="Pudding" id="b5" class="option-input hidden"><label for="b5" class="block border p-2 rounded text-center cursor-pointer">Pudding</label></div>
+                    </div>`;
+            }
+
+            document.getElementById('s1').checked = true;
+            document.querySelector('input[name="straw"][value="Con"]').checked = true;
+            document.getElementById('temp').value = "Con Hielo";
+            document.getElementById('sugar').value = "Normal (100%)";
+            document.querySelectorAll('.extra').forEach(c => { c.checked = false; c.disabled = false; });
+            
+            calcPrice();
+            document.getElementById('product-modal').classList.remove('hidden');
+        }
+
+        function limitFruit(limit) {
+            const checked = document.querySelectorAll('.fruit-check:checked');
+            if (checked.length > limit) {
+                event.target.checked = false; 
+                alert(`Solo puedes elegir ${limit} fruta(s)`);
+            }
+        }
+
+        function closeModal() { document.getElementById('product-modal').classList.add('hidden'); }
+
+        function calcPrice() {
+            let total = curProd.price;
+            const s = document.querySelector('input[name="size"]:checked');
+            if(s) total += parseFloat(s.getAttribute('data-price'));
+            const extras = document.querySelectorAll('.extra:checked');
+            total += (extras.length * 2);
+            
+            const allExtras = document.querySelectorAll('.extra');
+            if(extras.length >= 2) {
+                allExtras.forEach(c => { if(!c.checked) c.disabled = true; });
+            } else {
+                allExtras.forEach(c => c.disabled = false);
+            }
+            document.getElementById('m-total').innerText = `S/ ${total.toFixed(2)}`;
+        }
+
+        function addCart() {
+            let desc = "";
+            const size = document.querySelector('input[name="size"]:checked').parentElement.querySelector('span').innerText;
+            const temp = document.getElementById('temp').value;
+            const sugar = document.getElementById('sugar').value;
+            const straw = document.querySelector('input[name="straw"]:checked').parentElement.innerText.trim();
+            const extras = Array.from(document.querySelectorAll('.extra:checked')).map(e => e.parentElement.innerText.trim());
+            const price = parseFloat(document.getElementById('m-total').innerText.replace('S/ ', ''));
+
+            if (curProd.category === 'jugomix') {
+                const fruits = Array.from(document.querySelectorAll('.fruit-check:checked')).map(f => f.value);
+                if (fruits.length === 0) return alert("Por favor elige las frutas");
+                
+                let limit = 1; if(curProd.id === 1102) limit = 2; if(curProd.id === 1103) limit = 3;
+                if(fruits.length !== limit && fruits.length < limit) return alert(`Debes elegir exactamente ${limit} fruta(s)`);
+
+                desc = `Frutas: ${fruits.join(', ')} | ${size} | ${temp} | ${sugar}`;
+            } else {
+                const baseInput = document.querySelector('input[name="base"]:checked');
+                const base = baseInput ? baseInput.parentElement.innerText.trim() : "Estoy bien";
+                desc = `${base} | ${size} | ${temp} | ${sugar} | ${straw}`;
+            }
+            if(extras.length > 0) desc += ` | Extras: ${extras.join(', ')}`;
+
+            cart.push({ name: curProd.name, price: price, desc: desc });
+            closeModal();
+            updateBadges();
+            const fab = document.querySelector('button[onclick="toggleCart()"]');
+            fab.classList.add('scale-125'); setTimeout(()=>fab.classList.remove('scale-125'), 200);
+        }
+
+        function updateBadges() {
+            const c = cart.length;
+            ['badge-top', 'badge-fab'].forEach(id => {
+                const el = document.getElementById(id);
+                el.innerText = c;
+                el.classList.toggle('hidden', c === 0);
+            });
+        }
+
+        function toggleCart() {
+            const d = document.getElementById('cart-sheet');
+            const c = document.getElementById('cart-container'); // Fix responsive id match
+            if (d.classList.contains('hidden')) {
+                d.classList.remove('hidden');
+                renderCart();
+            } else {
+                d.classList.add('hidden');
+            }
+        }
+
+        function renderCart() {
+            const con = document.getElementById('cart-list');
+            con.innerHTML = '';
+            let t = 0;
+            if(cart.length === 0) con.innerHTML = '<p class="text-center text-gray-400 mt-10">Tu carrito está vacío ☹️</p>';
+            else {
+                cart.forEach((item, i) => {
+                    t += item.price;
+                    con.innerHTML += `
+                    <div class="bg-white p-3 rounded border border-gray-200 shadow-sm text-sm relative">
+                        <button onclick="cart.splice(${i},1);renderCart();updateBadges()" class="absolute top-2 right-2 text-red-500 font-bold text-lg hover:bg-red-50 rounded-full w-6 h-6 flex items-center justify-center">&times;</button>
+                        <div class="font-bold text-gray-800">${item.name}</div>
+                        <div class="text-xs text-gray-500 my-1">${item.desc}</div>
+                        <div class="font-bold text-[#ec061e]">S/ ${item.price.toFixed(2)}</div>
+                    </div>`;
+                });
+            }
+            document.getElementById('cart-final').innerText = `S/ ${t.toFixed(2)}`;
+        }
+
+        function calculateLevel(currentXP) {
+            let newLvlObj = levels[0]; 
+            for (let i = 0; i < levels.length; i++) {
+                if (currentXP >= levels[i].minXP) newLvlObj = levels[i];
+            }
+            return newLvlObj.lvl;
+        }
+
+        function checkoutWhatsApp() {
+            if (cart.length === 0) return alert("Tu carrito está vacío");
+            let msg = "Hola *MoMon Tea* 👁️, deseo pedir:%0A%0A";
+            let total = 0;
+            cart.forEach(item => {
+                msg += `▪️ *${item.name}* (S/ ${item.price.toFixed(2)})%0A   ${item.desc}%0A`;
+                total += item.price;
+            });
+            msg += `%0A*TOTAL: S/ ${total.toFixed(2)}*%0A`;
+            msg += "Método de pago: Yape / Plin";
+            
+            let gainedXP = Math.floor(total * 10);
+            let gainedTokens = Math.floor(total / 10);
+            let oldLevel = user.level;
+            user.xp += gainedXP;
+            user.tokens += gainedTokens;
+            
+            let newLevel = calculateLevel(user.xp);
+            if (newLevel > oldLevel) {
+                user.level = newLevel;
+                document.getElementById('levelup-name').innerText = levels[newLevel-1].name;
+                document.getElementById('levelup-modal').classList.remove('hidden');
+                confetti({ particleCount: 150, spread: 100 });
+            }
+
+            localStorage.setItem('momonUser', JSON.stringify(user));
+            updateProfile();
+            
+            // Clean URL and encode message correctly
+            const phone = "51975505093";
+            const url = `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
+            window.open(url, '_blank');
+        }
+
+        // --- GAMIFICACIÓN ---
+        function updateProfile() {
+            document.getElementById('user-name').innerText = user.name;
+            document.getElementById('user-xp').innerText = user.xp;
+            document.getElementById('user-tokens').innerText = user.tokens;
+            
+            let currentLvlObj = levels.find(l => l.lvl === user.level) || levels[0];
+            let nextLvlObj = levels.find(l => l.lvl === user.level + 1) || currentLvlObj;
+            
+            document.getElementById('user-rank').innerText = `Nivel ${user.level}: ${currentLvlObj.name}`;
+            document.getElementById('header-rank').innerText = `Nivel ${currentLevel.lvl}: ${currentLevel.name}`;
+            
+            let progress = 0;
+            if (user.level < 5) {
+                let range = nextLvlObj.minXP - currentLvlObj.minXP;
+                let current = user.xp - currentLvlObj.minXP;
+                progress = Math.min(100, Math.max(0, (current / range) * 100));
+                document.getElementById('xp-next').innerText = `Faltan ${nextLvlObj.minXP - user.xp} XP para Nivel ${user.level+1}`;
+            } else {
+                progress = 100;
+                document.getElementById('xp-next').innerText = "¡Nivel Máximo Alcanzado!";
+            }
+            document.getElementById('xp-bar').style.width = `${progress}%`;
+            document.getElementById('header-progress').style.width = `${progress}%`;
+        }
+
+        function renderBadges() {
+            const badgeList = [
+                {id: "pionero", icon: "🚩", name: "Pionero"}, {id: "explorador", icon: "🗺️", name: "Explorador"}, {id: "fiel", icon: "🤝", name: "Fiel"}
+            ];
+            const container = document.getElementById('badges-grid');
+            container.innerHTML = "";
+            badgeList.forEach(b => {
+                // Simulación badges desbloqueados si xp > 100
+                let unlocked = user.xp > 100; 
+                container.innerHTML += `<div class="bg-gray-50 p-2 rounded border flex flex-col items-center ${unlocked ? 'badge-unlocked' : 'badge-locked'}"><div class="text-2xl">${b.icon}</div><div class="text-[10px] font-bold">${b.name}</div></div>`;
+            });
+        }
+
+        function spin() {
+            if(user.tokens < 50) return alert("Necesitas 50 Tokens");
+            user.tokens -= 50; updateUser(); localStorage.setItem('momonClientV2', JSON.stringify(user));
+            const btn = document.getElementById('btn-spin'); btn.disabled = true;
+            const wheel = document.getElementById('roulette');
+            const res = document.getElementById('spin-result');
+            wheel.classList.add('spinning'); res.innerText = "Girando...";
+            let count = 0;
+            let items = ["🍵","🧁","🎟️","😢","⭐"];
+            let interval = setInterval(() => {
+                wheel.innerText = items[count % 5];
+                count++;
+                if(count > 20) {
+                    clearInterval(interval);
+                    wheel.classList.remove('spinning');
+                    btn.disabled = false;
+                    const rand = Math.random() * 100;
+                    let prize = "", icon = "";
+                    if(rand < 5) { prize="¡Té Gratis!"; icon="🍵"; }
+                    else if(rand < 15) { prize="Topping Gratis"; icon="🧁"; }
+                    else if(rand < 25) { prize="Cupón 20%"; icon="🎟️"; }
+                    else if(rand < 55) { prize="50 XP"; icon="⭐"; user.xp+=50; updateUser(); }
+                    else { prize="Suerte la próxima"; icon="😢"; }
+                    wheel.innerText = icon; res.innerText = prize;
+                    if(icon !== "😢") confetti();
+                    localStorage.setItem('momonUser', JSON.stringify(user));
+                }
+            }, 100);
+        }
+    </script>
+</body>
+</html>
