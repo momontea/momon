@@ -107,7 +107,7 @@
             <div id="view-shop">
                 <div class="mx-4 mb-6 bg-[#ffe115] border-4 border-black rounded-2xl p-6 paper-texture shadow-[4px_4px_0_0_black] flex flex-col md:flex-row justify-between items-center gap-4">
                     <div class="text-center md:text-left">
-                        <span class="bg-white text-[10px] font-bold px-2 py-1 border border-black rounded inline-block mb-2">🔥 HOY</span>
+                        <span class="bg-white text-[10px] font-bold px-2 py-1 border border-black rounded inline-block mb-2">🔥 PROMO DEL DÍA</span>
                         <h2 class="text-3xl md:text-5xl font-brand leading-none">MARTES <span class="text-red-600">2x1</span></h2>
                         <p class="text-sm md:text-base font-bold mt-1">En todos los Milk Teas. ¡Acumula doble XP!</p>
                     </div>
@@ -150,9 +150,9 @@
                         <li class="flex justify-between"><span>🧁 Topping Gratis</span> <span class="font-bold text-blue-600">10%</span></li>
                         <li class="flex justify-between"><span>🎫 Cupón 20% Dscto</span> <span class="font-bold text-purple-600">10%</span></li>
                         <li class="flex justify-between"><span>⭐ 50 Puntos XP</span> <span class="font-bold text-yellow-600">15%</span></li>
-                        <li class="flex justify-between"><span>🎲 Sorteo Premio Mayor</span> <span class="font-bold text-orange-600">15%</span></li>
-                        <li class="flex justify-between"><span>✨ 15 Puntos XP</span> <span class="font-bold text-yellow-600">15%</span></li>
-                        <li class="flex justify-between"><span>✨ 25 Puntos XP</span> <span class="font-bold text-yellow-600">10%</span></li>
+                        <li class="flex justify-between"><span>✨ 25 Puntos XP</span> <span class="font-bold text-yellow-600">15%</span></li>
+                         <li class="flex justify-between"><span>✨ 15 Puntos XP</span> <span class="font-bold text-yellow-600">15%</span></li>
+                         <li class="flex justify-between"><span>🎲 Sorteo Premio Mayor</span> <span class="font-bold text-orange-600">15%</span></li>
                         <li class="flex justify-between"><span>😢 Sigue intentando</span> <span class="font-bold text-gray-400">10%</span></li>
                     </ul>
                 </div>
@@ -176,8 +176,8 @@
                 </div>
                 
                 <div class="bg-white border-2 border-dashed border-gray-400 rounded-xl p-6 mb-8 text-center md:text-left">
-                    <h3 class="font-bold text-lg mb-2">🔑 Canjear Código</h3>
-                    <p class="text-sm text-gray-500 mb-4">Ingresa el código de tu boleta de WhatsApp para sumar tus puntos.</p>
+                    <h3 class="font-bold text-lg mb-2">🔑 Canjear Código de Compra</h3>
+                    <p class="text-sm text-gray-500 mb-4">Ingresa el código que te enviamos por WhatsApp en tu boleta.</p>
                     <div class="flex gap-2 max-w-md">
                         <input type="text" id="claim-code" placeholder="Ej: MOMON20" class="flex-1 border-2 border-gray-300 rounded-lg px-4 py-2 uppercase font-bold text-sm focus:border-[#ec061e] outline-none">
                         <button onclick="redeemCode()" class="bg-black text-white px-6 py-2 rounded-lg font-bold text-sm hover:bg-gray-800">Canjear</button>
@@ -252,7 +252,7 @@
             </div>
             <div class="p-4 border-t bg-white flex justify-between items-center absolute bottom-0 w-full z-20 md:relative md:rounded-b-2xl">
                 <div class="text-2xl font-brand text-[#ec061e]" id="m-total">S/ 0.00</div>
-                <button onclick="addCart()" class="bg-[#231f20] text-[#ffe115] px-8 py-3 rounded-xl font-bold hover:scale-105 transition shadow-lg">AGREGAR</button>
+                <button onclick="addCart()" class="bg-[#231f20] text-[#ffe115] px-8 py-3 rounded-xl font-bold hover:scale-105 transition shadow-lg">AGREGAR AL PEDIDO</button>
             </div>
         </div>
     </div>
@@ -315,10 +315,10 @@
             { id: 313, name: "Karma", category: "tea-tale", price: 14.00, desc: "Té Jasmín, Naranja, Hierbaluisa y Blueberry.", image: "bg-orange-300" },
             { id: 314, name: "Tropical Splash", category: "tea-tale", price: 14.00, desc: "Fresa, Mango, Piña y Soda.", image: "bg-orange-400" },
             { id: 401, name: "Wendigo", category: "shakes", price: 16.00, desc: "Leche de coco, menta, chicle y Cream Top.", image: "bg-blue-100" },
-            { id: 402, name: "Bluesea", category: "shakes", price: 16.00, desc: "Coco, Guanábana, Chicle y gomita.", image: "bg-cyan-200" },
+            { id: 402, name: "Bluesea", category: "shakes", price: 16.00, desc: "Coco, Guanábana, Chicle con gomita de Delfín.", image: "bg-cyan-200" },
             { id: 403, name: "Ying Yang Peruano", category: "shakes", price: 16.00, desc: "Té Negro, Café, Lúcuma y Chantillí.", image: "bg-orange-100" },
             { id: 404, name: "Granny Smith", category: "shakes", price: 15.00, desc: "Lychee, Manzana, Menta y Canela.", image: "bg-green-100" },
-            { id: 405, name: "Lucumoca", category: "shakes", price: 16.00, desc: "Cacao, Café, Lúcuma, Chantillí.", image: "bg-yellow-600" },
+            { id: 405, name: "Lucumoca", category: "shakes", price: 16.00, desc: "Cacao, Café, Lúcuma, Chantillí y Fudge.", image: "bg-yellow-600" },
             { id: 406, name: "Banana Split", category: "shakes", price: 16.00, desc: "Cacao, Plátano, Fresa y Chantillí.", image: "bg-yellow-100" },
             { id: 407, name: "Pie de Blueberry", category: "shakes", price: 17.00, desc: "Blueberry, Cream Top y Crumbles de galleta.", image: "bg-purple-300" },
             { id: 408, name: "Pie de Manzana", category: "shakes", price: 16.00, desc: "Manzana, Canela, Cream Top y Crumbles.", image: "bg-red-100" },
@@ -329,53 +329,53 @@
             { id: 413, name: "Pie de Chocolate", category: "shakes", price: 16.00, desc: "Cacao, Cream Top y Crumbles.", image: "bg-stone-700" },
             { id: 414, name: "Pie de Taro", category: "shakes", price: 17.00, desc: "Taro, Cream Top y Crumbles.", image: "bg-purple-200" },
             { id: 415, name: "Pie de Matcha", category: "shakes", price: 17.00, desc: "Matcha, Cream Top y Crumbles.", image: "bg-green-400" },
-            { id: 501, name: "Bosque", category: "lychee", price: 14.00, desc: "Té Verde, Hierbabuena, Lychee.", image: "bg-green-100" },
-            { id: 502, name: "Buda", category: "lychee", price: 15.00, desc: "Té Negro, Limón, Hierbaluisa.", image: "bg-orange-100" },
-            { id: 503, name: "GuanYin", category: "lychee", price: 14.00, desc: "Té Verde, Limón, Lychee.", image: "bg-yellow-100" },
-            { id: 504, name: "Sakura", category: "lychee", price: 15.00, desc: "Lychee, Té Verde, Fresa.", image: "bg-pink-200" },
-            { id: 505, name: "Sunset", category: "lychee", price: 14.00, desc: "Té Jasmín, Naranja, Lychee.", image: "bg-orange-300" },
+            { id: 501, name: "Bosque", category: "lychee", price: 14.00, desc: "Té Verde, Hierbabuena, Menta y Lychee.", image: "bg-green-100" },
+            { id: 502, name: "Buda", category: "lychee", price: 15.00, desc: "Té Negro, Limón, Hierbaluisa, Kión y Lychee.", image: "bg-orange-100" },
+            { id: 503, name: "GuanYin", category: "lychee", price: 14.00, desc: "Té Verde, Limón, Hierbaluisa y Lychee.", image: "bg-yellow-100" },
+            { id: 504, name: "Sakura", category: "lychee", price: 15.00, desc: "Lychee, Té Verde, Fresa y Sandía.", image: "bg-pink-200" },
+            { id: 505, name: "Sunset", category: "lychee", price: 14.00, desc: "Té Jasmín, Naranja, Lychee, Fresa y Soda.", image: "bg-orange-300" },
             { id: 601, name: "Palta Frutado (Fresa)", category: "palta", price: 17.00, desc: "Cremosa palta batida con Fresas.", image: "bg-green-200" },
-            { id: 602, name: "Palta Frutado (Blue)", category: "palta", price: 18.00, desc: "Palta con Blueberry.", image: "bg-purple-200" },
-            { id: 603, name: "Palta Frutado (Mara)", category: "palta", price: 17.00, desc: "Palta con Maracuyá.", image: "bg-yellow-200" },
-            { id: 604, name: "Palta con Té y Leche", category: "palta", price: 16.00, desc: "Palta, Té, Leche.", image: "bg-green-100" },
+            { id: 602, name: "Palta Frutado (Blue)", category: "palta", price: 18.00, desc: "Palta batida con Blueberrys.", image: "bg-purple-200" },
+            { id: 603, name: "Palta Frutado (Mara)", category: "palta", price: 17.00, desc: "Palta batida con Maracuyá.", image: "bg-yellow-200" },
+            { id: 604, name: "Palta con Té y Leche", category: "palta", price: 16.00, desc: "Palta, Té, Leche y Cream Top.", image: "bg-green-100" },
             { id: 605, name: "Palta con Chocolate", category: "palta", price: 17.00, desc: "Palta y Cacao Mix.", image: "bg-stone-600" },
-            { id: 606, name: "Palta con Taro", category: "palta", price: 18.00, desc: "Palta y Taro.", image: "bg-purple-100" },
-            { id: 607, name: "Palta con Probiótico", category: "palta", price: 18.00, desc: "Palta con probióticos.", image: "bg-green-50" },
-            { id: 608, name: "Pitufín", category: "palta", price: 17.00, desc: "Palta, Mango, Chicle (Azul).", image: "bg-blue-200" },
+            { id: 606, name: "Palta con Taro", category: "palta", price: 18.00, desc: "Palta y Taro. ¡Doble cremosidad!", image: "bg-purple-100" },
+            { id: 607, name: "Palta con Probiótico", category: "palta", price: 18.00, desc: "Palta con tu dosis de probióticos.", image: "bg-green-50" },
+            { id: 608, name: "Pitufín", category: "palta", price: 17.00, desc: "Palta, Mango, Leche y Jarabe de Chicle (Azul).", image: "bg-blue-200" },
             { id: 701, name: "Probiótico Fresa", category: "probiotico", price: 15.00, desc: "Fresa con probióticos.", image: "bg-red-200" },
             { id: 702, name: "Probiótico Blueberry", category: "probiotico", price: 16.00, desc: "Blueberry con probióticos.", image: "bg-purple-300" },
-            { id: 703, name: "Antioxidante", category: "probiotico", price: 17.00, desc: "Fresa, Blueberry, Matcha.", image: "bg-purple-900" },
-            { id: 704, name: "Slim Tea", category: "probiotico", price: 14.00, desc: "Piña, Té Verde, Hierbabuena.", image: "bg-yellow-100" },
-            { id: 705, name: "Blackberry", category: "probiotico", price: 15.00, desc: "Blueberry, Té Oolong.", image: "bg-purple-800" },
-            { id: 706, name: "GreenDay", category: "probiotico", price: 14.00, desc: "Té Verde, Limón, Menta.", image: "bg-green-300" },
-            { id: 707, name: "Refrescante", category: "probiotico", price: 14.00, desc: "Té Jasmín, Naranja, Limón.", image: "bg-orange-200" },
+            { id: 703, name: "Antioxidante", category: "probiotico", price: 17.00, desc: "Fresa, Blueberry, Matcha y Probióticos.", image: "bg-purple-900" },
+            { id: 704, name: "Slim Tea", category: "probiotico", price: 14.00, desc: "Piña, Té Verde, Hierbabuena y Probióticos.", image: "bg-yellow-100" },
+            { id: 705, name: "Blackberry", category: "probiotico", price: 15.00, desc: "Blueberry, Té Oolong y Probióticos.", image: "bg-purple-800" },
+            { id: 706, name: "GreenDay", category: "probiotico", price: 14.00, desc: "Té Verde, Limón, Menta, Hierba buena y Probióticos.", image: "bg-green-300" },
+            { id: 707, name: "Refrescante", category: "probiotico", price: 14.00, desc: "Té Jasmín, Naranja, Limón y Probióticos.", image: "bg-orange-200" },
             { id: 801, name: "Matcha Latte", category: "matcha", price: 15.00, desc: "Matcha puro con leche.", image: "bg-green-400" },
             { id: 802, name: "Matcha Oreo", category: "matcha", price: 16.00, desc: "Matcha Latte batido con Oreo.", image: "bg-green-500" },
-            { id: 803, name: "Matcha Fresa", category: "matcha", price: 16.00, desc: "Matcha con Fresa.", image: "bg-red-300" },
-            { id: 804, name: "Matcha Blueberry", category: "matcha", price: 17.00, desc: "Matcha con Blueberry.", image: "bg-purple-400" },
-            { id: 805, name: "Matcha Maracuyá", category: "matcha", price: 16.00, desc: "Matcha con Maracuyá.", image: "bg-yellow-400" },
-            { id: 806, name: "Matcha Colada", category: "matcha", price: 16.00, desc: "Matcha, Piña, Coco.", image: "bg-yellow-100" },
-            { id: 807, name: "Matcha Tropical", category: "matcha", price: 16.00, desc: "Matcha, Piña, Naranja.", image: "bg-orange-300" },
-            { id: 808, name: "LucuMatcha", category: "matcha", price: 17.00, desc: "Matcha, Lúcuma.", image: "bg-yellow-600" },
-            { id: 901, name: "Taro Latte", category: "taro", price: 15.00, desc: "Taro clásico, leche.", image: "bg-purple-300" },
-            { id: 902, name: "Taro Oreo", category: "taro", price: 16.00, desc: "Taro, Oreo.", image: "bg-purple-400" },
-            { id: 903, name: "Taro Fresa", category: "taro", price: 16.00, desc: "Taro, Fresa.", image: "bg-pink-300" },
-            { id: 904, name: "Taro Blueberry", category: "taro", price: 17.00, desc: "Taro, Blueberry.", image: "bg-purple-600" },
-            { id: 905, name: "Taro Maracuyá", category: "taro", price: 16.00, desc: "Taro, Maracuyá.", image: "bg-yellow-300" },
-            { id: 906, name: "Taro Lúcuma", category: "taro", price: 17.00, desc: "Taro, Lúcuma.", image: "bg-purple-200" },
-            { id: 907, name: "Tarolandia", category: "taro", price: 18.00, desc: "Taro, Mango, Matcha.", image: "bg-green-300" },
-            { id: 908, name: "Alice", category: "taro", price: 17.00, desc: "Taro, Coco, Algodón.", image: "bg-purple-100" },
-            { id: 1001, name: "Bubble Rose", category: "bubble-love", price: 16.00, desc: "Fresa, Leche, Corazones.", image: "bg-pink-100" },
-            { id: 1002, name: "Bubble Fall", category: "bubble-love", price: 16.00, desc: "Lúcuma, Fudge.", image: "bg-yellow-500" },
-            { id: 1003, name: "Bubble Sky", category: "bubble-love", price: 16.00, desc: "Limón, Algodón.", image: "bg-blue-100" },
-            { id: 1101, name: "Jugo 1 Fruta", category: "jugomix", price: 12.00, desc: "Elige 1 fruta.", image: "bg-red-100" },
-            { id: 1102, name: "Jugo 2 Frutas", category: "jugomix", price: 13.00, desc: "Elige 2 frutas.", image: "bg-orange-200" },
-            { id: 1103, name: "Jugo 3 Frutas", category: "jugomix", price: 14.00, desc: "Elige 3 frutas.", image: "bg-yellow-200" }
+            { id: 803, name: "Matcha Fresa", category: "matcha", price: 16.00, desc: "Matcha con jugo de Fresa.", image: "bg-red-300" },
+            { id: 804, name: "Matcha Blueberry", category: "matcha", price: 17.00, desc: "Matcha con jugo de Blueberry.", image: "bg-purple-400" },
+            { id: 805, name: "Matcha Maracuyá", category: "matcha", price: 16.00, desc: "Matcha con jugo de Maracuyá.", image: "bg-yellow-400" },
+            { id: 806, name: "Matcha Colada", category: "matcha", price: 16.00, desc: "Matcha, Piña y Leche de Coco.", image: "bg-yellow-100" },
+            { id: 807, name: "Matcha Tropical", category: "matcha", price: 16.00, desc: "Matcha, Piña y Naranja.", image: "bg-orange-300" },
+            { id: 808, name: "LucuMatcha", category: "matcha", price: 17.00, desc: "Matcha, Lúcuma, Chantillí y polvo matcha.", image: "bg-yellow-600" },
+            { id: 901, name: "Taro Latte", category: "taro", price: 15.00, desc: "Taro clásico con leche.", image: "bg-purple-300" },
+            { id: 902, name: "Taro Oreo", category: "taro", price: 16.00, desc: "Taro batido con Oreo.", image: "bg-purple-400" },
+            { id: 903, name: "Taro Fresa", category: "taro", price: 16.00, desc: "Taro con jugo de Fresa.", image: "bg-pink-300" },
+            { id: 904, name: "Taro Blueberry", category: "taro", price: 17.00, desc: "Taro con jugo de Blueberry.", image: "bg-purple-600" },
+            { id: 905, name: "Taro Maracuyá", category: "taro", price: 16.00, desc: "Taro con jugo de Maracuyá.", image: "bg-yellow-300" },
+            { id: 906, name: "Taro Lúcuma", category: "taro", price: 17.00, desc: "Taro con Lúcuma y Chantillí.", image: "bg-purple-200" },
+            { id: 907, name: "Tarolandia", category: "taro", price: 18.00, desc: "Taro, Mango y Matcha. ¡Trifásico!", image: "bg-green-300" },
+            { id: 908, name: "Alice", category: "taro", price: 17.00, desc: "Taro, Leche de Coco, Cream Top y Algodón de Azúcar.", image: "bg-purple-100" },
+            { id: 1001, name: "Bubble Rose", category: "bubble-love", price: 16.00, desc: "Fresa, Leche, Vainilla, Chantillí y Corazones.", image: "bg-pink-100" },
+            { id: 1002, name: "Bubble Fall", category: "bubble-love", price: 16.00, desc: "Lúcuma, Leche, Fudge y Chantillí.", image: "bg-yellow-500" },
+            { id: 1003, name: "Bubble Sky", category: "bubble-love", price: 16.00, desc: "Limón, Leche, Cream Top y Algodón de Azúcar.", image: "bg-blue-100" },
+            { id: 1101, name: "Jugo de 1 Fruta", category: "jugomix", price: 12.00, desc: "Elige entre Fresa, Maracuyá o Lychee.", image: "bg-red-100" },
+            { id: 1102, name: "Jugo de 2 Frutas", category: "jugomix", price: 13.00, desc: "Mix de Fresa y Mango.", image: "bg-orange-200" },
+            { id: 1103, name: "Jugo de 3 Frutas", category: "jugomix", price: 14.00, desc: "Fresa, Mango y Lúcuma.", image: "bg-yellow-200" }
         ];
         
-        // CAMBIO CLAVE LOCALSTORAGE PARA FORZAR REINICIO A NIVEL 1
+        // CAMBIO CLAVE LOCALSTORAGE PARA FORZAR REINICIO A NIVEL 1 (V17)
         let cart = [];
-        let user = JSON.parse(localStorage.getItem('momonClientV2')) || { xp: 0, tokens: 50, level: 1 };
+        let user = JSON.parse(localStorage.getItem('momonFinalV17')) || { xp: 0, tokens: 50, level: 1 };
         if(!user.level) user.level = 1;
         let curProd = null;
 
@@ -393,23 +393,18 @@
         }
 
         function nav(tab) {
-            // Desktop Nav
             ['shop','games','profile'].forEach(t => {
                 document.getElementById('view-'+t).classList.add('hidden');
                 const dBtn = document.getElementById('d-btn-'+t);
                 const mBtn = document.getElementById('btn-'+t);
-                
                 if(dBtn) dBtn.classList.remove('text-[#ec061e]');
                 if(mBtn) { mBtn.classList.remove('nav-active'); mBtn.classList.add('text-gray-400'); }
             });
-
             document.getElementById('view-'+tab).classList.remove('hidden');
             const dActive = document.getElementById('d-btn-'+tab);
             const mActive = document.getElementById('btn-'+tab);
-            
             if(dActive) dActive.classList.add('text-[#ec061e]');
             if(mActive) { mActive.classList.add('nav-active'); mActive.classList.remove('text-gray-400'); }
-            
             window.scrollTo(0,0);
         }
 
@@ -441,7 +436,6 @@
             render(cat);
         }
 
-        // --- MODAL LOGIC ---
         function openModal(id) {
             curProd = products.find(p => p.id === id);
             document.getElementById('m-title').innerText = curProd.name;
@@ -459,10 +453,21 @@
                     html += `<label class="flex items-center gap-2 p-2 border rounded-lg cursor-pointer hover:bg-gray-50"><input type="checkbox" value="${fruit}" class="fruit-check" onchange="limitFruit(${limit})"> ${fruit}</label>`;
                 });
                 html += `</div>`;
+                // JugoMix TAMBIÉN LLEVA BASE
+                html += `
+                    <label class="font-bold text-sm block mt-4 mb-2">Diversión (Base)</label>
+                    <div class="grid grid-cols-2 gap-2 text-xs">
+                        <div class="relative"><input type="radio" name="base" value="Estoy bien" id="b0" class="option-input hidden" checked><label for="b0" class="block border p-2 rounded text-center cursor-pointer">Estoy bien</label></div>
+                        <div class="relative"><input type="radio" name="base" value="Tapioca" id="b1" class="option-input hidden"><label for="b1" class="block border p-2 rounded text-center cursor-pointer">Tapioca</label></div>
+                        <div class="relative"><input type="radio" name="base" value="Gelatina Coco" id="b2" class="option-input hidden"><label for="b2" class="block border p-2 rounded text-center cursor-pointer">Gelatina Coco</label></div>
+                        <div class="relative"><input type="radio" name="base" value="Juicyball" id="b3" class="option-input hidden"><label for="b3" class="block border p-2 rounded text-center cursor-pointer">Juicyball</label></div>
+                        <div class="relative"><input type="radio" name="base" value="Sienchao" id="b4" class="option-input hidden"><label for="b4" class="block border p-2 rounded text-center cursor-pointer">Sienchao</label></div>
+                        <div class="relative"><input type="radio" name="base" value="Pudding" id="b5" class="option-input hidden"><label for="b5" class="block border p-2 rounded text-center cursor-pointer">Pudding</label></div>
+                    </div>`;
                 dyn.innerHTML = html;
             } else {
                 dyn.innerHTML = `
-                    <label class="font-bold text-sm block mb-2">1. Diversión (Base)</label>
+                    <label class="font-bold text-sm block mb-2">Diversión (Base)</label>
                     <div class="grid grid-cols-2 gap-2 text-xs">
                         <div class="relative"><input type="radio" name="base" value="Estoy bien" id="b0" class="option-input hidden" checked><label for="b0" class="block border p-2 rounded text-center cursor-pointer">Estoy bien</label></div>
                         <div class="relative"><input type="radio" name="base" value="Tapioca" id="b1" class="option-input hidden"><label for="b1" class="block border p-2 rounded text-center cursor-pointer">Tapioca</label></div>
@@ -518,18 +523,18 @@
             const extras = Array.from(document.querySelectorAll('.extra:checked')).map(e => e.parentElement.innerText.trim());
             const price = parseFloat(document.getElementById('m-total').innerText.replace('S/ ', ''));
 
+            // Base Logic for ALL
+            const baseInput = document.querySelector('input[name="base"]:checked');
+            const base = baseInput ? baseInput.parentElement.innerText.trim() : "Estoy bien";
+
             if (curProd.category === 'jugomix') {
                 const fruits = Array.from(document.querySelectorAll('.fruit-check:checked')).map(f => f.value);
                 if (fruits.length === 0) return alert("Por favor elige las frutas");
-                
                 let limit = 1; if(curProd.id === 1102) limit = 2; if(curProd.id === 1103) limit = 3;
                 if(fruits.length !== limit && fruits.length < limit) return alert(`Debes elegir exactamente ${limit} fruta(s)`);
-
-                desc = `Frutas: ${fruits.join(', ')} | ${size} | ${temp} | ${sugar}`;
+                desc = `Frutas: ${fruits.join(', ')} | Base: ${base} | Tam: ${size} | ${temp} | ${sugar} | ${straw}`;
             } else {
-                const baseInput = document.querySelector('input[name="base"]:checked');
-                const base = baseInput ? baseInput.parentElement.innerText.trim() : "Estoy bien";
-                desc = `${base} | ${size} | ${temp} | ${sugar} | ${straw}`;
+                desc = `Base: ${base} | Tam: ${size} | ${temp} | ${sugar} | ${straw}`;
             }
             if(extras.length > 0) desc += ` | Extras: ${extras.join(', ')}`;
 
@@ -554,9 +559,11 @@
             const c = document.getElementById('cart-container'); // Fix responsive id match
             if (d.classList.contains('hidden')) {
                 d.classList.remove('hidden');
+                setTimeout(() => c.classList.remove('translate-x-full'), 10);
                 renderCart();
             } else {
-                d.classList.add('hidden');
+                c.classList.add('translate-x-full');
+                setTimeout(() => d.classList.add('hidden'), 300);
             }
         }
 
@@ -580,16 +587,8 @@
             document.getElementById('cart-final').innerText = `S/ ${t.toFixed(2)}`;
         }
 
-        function calculateLevel(currentXP) {
-            let newLvlObj = levels[0]; 
-            for (let i = 0; i < levels.length; i++) {
-                if (currentXP >= levels[i].minXP) newLvlObj = levels[i];
-            }
-            return newLvlObj.lvl;
-        }
-
-        function checkoutWhatsApp() {
-            if (cart.length === 0) return alert("Tu carrito está vacío");
+        function sendWA() {
+            if(cart.length === 0) return alert("Tu carrito está vacío");
             let msg = "Hola *MoMon Tea* 👁️, deseo pedir:%0A%0A";
             let total = 0;
             cart.forEach(item => {
@@ -599,71 +598,61 @@
             msg += `%0A*TOTAL: S/ ${total.toFixed(2)}*%0A`;
             msg += "Método de pago: Yape / Plin";
             
-            let gainedXP = Math.floor(total * 10);
-            let gainedTokens = Math.floor(total / 10);
-            let oldLevel = user.level;
-            user.xp += gainedXP;
-            user.tokens += gainedTokens;
-            
-            let newLevel = calculateLevel(user.xp);
-            if (newLevel > oldLevel) {
-                user.level = newLevel;
-                document.getElementById('levelup-name').innerText = levels[newLevel-1].name;
-                document.getElementById('levelup-modal').classList.remove('hidden');
-                confetti({ particleCount: 150, spread: 100 });
-            }
+            user.xp += Math.floor(total * 10);
+            user.tokens += Math.floor(total / 10);
+            localStorage.setItem('momonFinalV17', JSON.stringify(user));
+            updateUser();
 
-            localStorage.setItem('momonUser', JSON.stringify(user));
-            updateProfile();
-            
-            // Clean URL and encode message correctly
-            const phone = "51975505093";
-            const url = `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
-            window.open(url, '_blank');
+            window.open(`https://wa.me/51975505093?text=${encodeURIComponent(msg)}`, '_blank');
         }
 
-        // --- GAMIFICACIÓN ---
-        function updateProfile() {
-            document.getElementById('user-name').innerText = user.name;
-            document.getElementById('user-xp').innerText = user.xp;
-            document.getElementById('user-tokens').innerText = user.tokens;
-            
-            let currentLvlObj = levels.find(l => l.lvl === user.level) || levels[0];
-            let nextLvlObj = levels.find(l => l.lvl === user.level + 1) || currentLvlObj;
-            
-            document.getElementById('user-rank').innerText = `Nivel ${user.level}: ${currentLvlObj.name}`;
-            document.getElementById('header-rank').innerText = `Nivel ${currentLevel.lvl}: ${currentLevel.name}`;
-            
-            let progress = 0;
-            if (user.level < 5) {
-                let range = nextLvlObj.minXP - currentLvlObj.minXP;
-                let current = user.xp - currentLvlObj.minXP;
-                progress = Math.min(100, Math.max(0, (current / range) * 100));
-                document.getElementById('xp-next').innerText = `Faltan ${nextLvlObj.minXP - user.xp} XP para Nivel ${user.level+1}`;
-            } else {
-                progress = 100;
-                document.getElementById('xp-next').innerText = "¡Nivel Máximo Alcanzado!";
+        function updateUser() {
+            let currentLevel = levels[0];
+            for (let i = 0; i < levels.length; i++) {
+                if (user.xp >= levels[i].minXP) currentLevel = levels[i];
             }
-            document.getElementById('xp-bar').style.width = `${progress}%`;
-            document.getElementById('header-progress').style.width = `${progress}%`;
+            
+            document.getElementById('user-name').innerText = user.name;
+            document.getElementById('user-rank').innerText = `Nivel ${currentLevel.lvl}: ${currentLevel.name}`;
+            document.getElementById('header-rank').innerText = `Nivel ${currentLevel.lvl}: ${currentLevel.name}`;
+            document.getElementById('p-xp').innerText = user.xp;
+            document.getElementById('p-tokens').innerText = user.tokens;
+            document.getElementById('game-tokens').innerText = user.tokens;
+            
+            let nextL = levels.find(l => l.lvl === currentLevel.lvl + 1);
+            let p = 100;
+            let txt = "¡Máximo!";
+            if(nextL) {
+                let range = nextL.minXP - currentLevel.minXP;
+                let curr = user.xp - currentLevel.minXP;
+                p = Math.min((curr/range)*100, 100);
+                txt = `Faltan ${nextL.minXP - user.xp} XP para ${nextL.name}`;
+            }
+            document.getElementById('xp-bar').style.width = p + '%';
+            document.getElementById('xp-next').innerText = txt;
+        }
+
+        function redeemCode() {
+            const code = document.getElementById('claim-code').value.toUpperCase();
+            if(code === "MOMON20") {
+                if(localStorage.getItem('code_momon20')) return alert("Ya usado");
+                user.xp += 200; user.tokens += 20;
+                localStorage.setItem('code_momon20', true);
+                localStorage.setItem('momonFinalV17', JSON.stringify(user));
+                updateUser(); alert("¡Canjeado!");
+            } else alert("Código inválido");
         }
 
         function renderBadges() {
-            const badgeList = [
-                {id: "pionero", icon: "🚩", name: "Pionero"}, {id: "explorador", icon: "🗺️", name: "Explorador"}, {id: "fiel", icon: "🤝", name: "Fiel"}
-            ];
-            const container = document.getElementById('badges-grid');
-            container.innerHTML = "";
-            badgeList.forEach(b => {
-                // Simulación badges desbloqueados si xp > 100
-                let unlocked = user.xp > 100; 
-                container.innerHTML += `<div class="bg-gray-50 p-2 rounded border flex flex-col items-center ${unlocked ? 'badge-unlocked' : 'badge-locked'}"><div class="text-2xl">${b.icon}</div><div class="text-[10px] font-bold">${b.name}</div></div>`;
-            });
+            const b = [{i:"🚩",n:"Pionero"},{i:"🗺️",n:"Explorador"},{i:"🤝",n:"Fiel"}];
+            const c = document.getElementById('badges');
+            c.innerHTML = "";
+            b.forEach(x => c.innerHTML += `<div class="bg-gray-50 p-2 rounded border text-center ${user.xp>0?'':'opacity-50 grayscale'}"><div class="text-2xl">${x.i}</div><div class="text-xs font-bold">${x.n}</div></div>`);
         }
 
         function spin() {
             if(user.tokens < 50) return alert("Necesitas 50 Tokens");
-            user.tokens -= 50; updateUser(); localStorage.setItem('momonClientV2', JSON.stringify(user));
+            user.tokens -= 50; updateUser(); localStorage.setItem('momonFinalV17', JSON.stringify(user));
             const btn = document.getElementById('btn-spin'); btn.disabled = true;
             const wheel = document.getElementById('roulette');
             const res = document.getElementById('spin-result');
@@ -686,11 +675,10 @@
                     else { prize="Suerte la próxima"; icon="😢"; }
                     wheel.innerText = icon; res.innerText = prize;
                     if(icon !== "😢") confetti();
-                    localStorage.setItem('momonUser', JSON.stringify(user));
+                    localStorage.setItem('momonFinalV17', JSON.stringify(user));
                 }
             }, 100);
         }
     </script>
 </body>
-
 </html>
